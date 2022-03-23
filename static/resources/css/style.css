@@ -86,7 +86,7 @@ video {
   font: inherit;
   vertical-align: baseline;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -126,12 +126,12 @@ button {
   border-radius: 0;
   outline: none;
   -webkit-box-shadow: none;
-  box-shadow: none;
+          box-shadow: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 input,
@@ -170,28 +170,22 @@ ul {
   color: transparent;
 }
 
-.search-box,
-.header__search-wrap .search-categories-button,
-.header__search-wrap .search-categories li,
-.header__search-wrap .search-input {
+.search-box, .header__search-wrap .search-categories-button, .header__search-wrap .search-categories li, .header__search-wrap .search-input {
   text-indent: 12px;
   line-height: 36px;
 }
 
-.search-pop,
-.header__search-wrap .search-categories,
-.header__search-wrap .search-recent-keywords {
+.search-pop, .header__search-wrap .search-categories, .header__search-wrap .search-recent-keywords-wrap {
   border: 1px solid #ddd;
   -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
   background: #fff;
   overflow-y: auto;
 }
 
-.search-pop__hover,
-.header__search-wrap .search-categories li:hover span,
-.header__search-wrap .search-recent-keywords a.active,
-.header__search-wrap .search-recent-keywords a:hover span {
+.search-pop__hover, .header__search-wrap .search-categories li.active span,
+.header__search-wrap .search-categories li:hover span, .header__search-wrap .search-recent-keywords li.active span,
+.header__search-wrap .search-recent-keywords li:hover span {
   color: #4285f4;
   text-decoration: underline;
 }
@@ -213,7 +207,7 @@ ul {
 .header__search-wrap .search-categories-wrap {
   width: 134px;
   border-right: 1px solid #ddd;
-  background: url('https://static.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png') no-repeat 112px -162px;
+  background: url("https://static.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") no-repeat 112px -162px;
 }
 
 .header__search-wrap .search-categories {
@@ -223,6 +217,7 @@ ul {
   border-width: 0;
   -webkit-transition: all 0.15s ease-in-out;
   transition: all 0.15s ease-in-out;
+  overflow-y: auto;
 }
 
 .header__search-wrap .search-categories.active {
@@ -242,8 +237,8 @@ ul {
 
 .header__search-wrap .search-bar-wrap {
   -webkit-box-flex: 1;
-  -ms-flex: 1 0 0px;
-  flex: 1 0 0;
+      -ms-flex: 1 0 0px;
+          flex: 1 0 0;
 }
 
 .header__search-wrap .search-bar {
@@ -254,35 +249,68 @@ ul {
 
 .header__search-wrap .search-input {
   -webkit-box-flex: 1;
-  -ms-flex: 1 0 0px;
-  flex: 1 0 0;
+      -ms-flex: 1 0 0px;
+          flex: 1 0 0;
   font-size: 1rem;
 }
 
 .header__search-wrap .search-button {
   width: 40px;
   height: 36px;
-  background: url('https://static.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png') no-repeat -118px -71px;
+  background: url("https://static.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") no-repeat -118px -71px;
 }
 
-.header__search-wrap .search-recent-keywords {
+.header__search-wrap .search-recent-keywords-wrap {
   display: none;
   width: calc(100% + 3px);
   margin-left: -1px;
   line-height: 36px;
 }
 
-.header__search-wrap .search-recent-keywords.active {
+.header__search-wrap .search-recent-keywords-wrap.active {
   display: block;
 }
 
-.header__search-wrap .search-recent-keywords .title {
+.header__search-wrap .search-recent-keywords-wrap .delete-button {
+  padding: 0 6px;
+  color: #4285f4;
+  opacity: 0;
+}
+
+.header__search-wrap .search-recent-keywords-wrap .delete-button:hover {
+  opacity: 1;
+}
+
+.header__search-wrap .search-recent-keywords-wrap .bottomButtons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  color: #888;
+  line-height: 30px;
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
+}
+
+.header__search-wrap .search-recent-keywords-wrap .all-delete-button,
+.header__search-wrap .search-recent-keywords-wrap .switch-button {
+  padding: 0 12px;
+}
+
+.header__search-wrap .search-recent-keywords-wrap .all-delete-button:hover,
+.header__search-wrap .search-recent-keywords-wrap .switch-button:hover {
+  text-decoration: underline;
+}
+
+.header__search-wrap .search-recent-keywords-title {
   margin: 0 6px;
   font-weight: 700;
   border-bottom: 1px solid #ddd;
 }
 
-.header__search-wrap .search-recent-keywords ol {
+.header__search-wrap .search-recent-keywords {
   padding: 10px 0;
 }
 
@@ -291,47 +319,39 @@ ul {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .header__search-wrap .search-recent-keywords a {
   -webkit-box-flex: 1;
-  -ms-flex: 1 0 0px;
-  flex: 1 0 0;
+      -ms-flex: 1 0 0px;
+          flex: 1 0 0;
   text-indent: 6px;
   line-height: 30px;
 }
 
-.header__search-wrap .search-recent-keywords .delete-button {
-  padding: 0 6px;
-  color: #4285f4;
-  opacity: 0;
+.header__search-wrap .search-automatic-completion-wrap {
+  display: none;
+  padding: 10px 0;
 }
 
-.header__search-wrap .search-recent-keywords .delete-button:hover {
-  opacity: 1;
+.header__search-wrap .search-automatic-completion-wrap.active {
+  display: block;
 }
 
-.header__search-wrap .search-recent-keywords .bottomButtons {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  color: #888;
-  line-height: 30px;
-  background: #f5f5f5;
-  border-top: 1px solid #ddd;
-}
-
-.header__search-wrap .search-recent-keywords .all-delete-button,
-.header__search-wrap .search-recent-keywords .switch-button {
-  padding: 0 12px;
-}
-
-.header__search-wrap .search-recent-keywords .all-delete-button:hover,
-.header__search-wrap .search-recent-keywords .switch-button:hover {
+.header__search-wrap .search-automatic-completion-wrap li.active span,
+.header__search-wrap .search-automatic-completion-wrap li.active span:hover {
   text-decoration: underline;
+}
+
+.header__search-wrap .search-automatic-completion-wrap a {
+  display: block;
+  padding: 0 12px;
+  line-height: 30px;
+}
+
+.header__search-wrap .search-automatic-completion-wrap b {
+  font-weight: 700;
+  color: #4285f4;
 }

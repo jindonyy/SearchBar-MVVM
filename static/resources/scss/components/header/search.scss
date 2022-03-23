@@ -40,6 +40,7 @@ $search-height: 36px;
       margin-left: -2px;
       border-width: 0;
       transition: all 0.15s ease-in-out;
+      overflow-y: auto;
       &.active {
         max-height: 325px;
         border-width: 1px;
@@ -53,6 +54,7 @@ $search-height: 36px;
         @extend .search-box;
         height: 100%;
         cursor: pointer;
+        &.active span,
         &:hover span {
           @extend .search-pop__hover;
         }
@@ -75,7 +77,7 @@ $search-height: 36px;
       height: $search-height;
       background: url('https://static.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png') no-repeat -118px -71px;
     }
-    &-recent-keywords {
+    &-recent-keywords-wrap {
       @extend .search-pop;
       display: none;
       width: calc(100% + 3px);
@@ -83,29 +85,6 @@ $search-height: 36px;
       line-height: $search-height;
       &.active {
         display: block;
-      }
-      .title {
-        margin: 0 6px;
-        font-weight: $weight-B;
-        border-bottom: 1px solid $light-gray;
-      }
-      ol {
-        padding: 10px 0;
-      }
-      li {
-        display: flex;
-        justify-content: space-between;
-      }
-      a {
-        flex: 1 0 0;
-        text-indent: 6px;
-        line-height: 30px;
-        &.active {
-          @extend .search-pop__hover;
-        }
-        &:hover span {
-          @extend .search-pop__hover;
-        }
       }
       .delete-button {
         padding: 0 6px;
@@ -129,6 +108,49 @@ $search-height: 36px;
         &:hover {
           text-decoration: underline;
         }
+      }
+    }
+    &-recent-keywords-title {
+      margin: 0 6px;
+      font-weight: $weight-B;
+      border-bottom: 1px solid $light-gray;
+    }
+    &-recent-keywords {
+      padding: 10px 0;
+      li {
+        display: flex;
+        justify-content: space-between;
+        &.active span,
+        &:hover span {
+          @extend .search-pop__hover;
+        }
+      }
+      a {
+        flex: 1 0 0;
+        text-indent: 6px;
+        line-height: 30px;
+      }
+    }
+    &-automatic-completion-wrap {
+      display: none;
+      padding: 10px 0;
+      &.active {
+        display: block;
+      }
+      li {
+        &.active span,
+        &.active span:hover {
+          text-decoration: underline;
+        }
+      }
+      a {
+        display: block;
+        padding: 0 12px;
+        line-height: 30px;
+      }
+      b {
+        font-weight: $weight-B;
+        color: $blue;
       }
     }
   }

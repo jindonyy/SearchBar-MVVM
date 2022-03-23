@@ -1,4 +1,4 @@
-# 쇼핑몰 - 모듈과 객체지향프로그래밍
+# \[ Step2 \] 쇼핑몰 - 모듈과 객체지향프로그래밍
 
 ## 구현 결과
 
@@ -6,53 +6,56 @@
 - [x] 검색어를 입력하면 콘텐츠가 사라진다.
 - [x] 전체를 클릭하면 하단에 카테고리가 애니메이션으로 휘리릭~ 펼쳐진다.
 - [x] 전체 삭제 클릭 시, 기록이 삭제되고 내역 창이 닫긴다.
-- [ ] 최근검색어끄기 클릭 시, 내역 창이 닫긴다.
+- [ ] 최근검색어끄기 클릭 시, 검색 기록이 남지 않는다.
+  - flag를 만들어서 최근 검색어 기능이 켜져있을 때만 기록이 남는 함수가 작동하도록 한다.
+    - flag: true => 검색 내역 리스트, 최근검색어끄기
+    - flag: false => 검색어 기능이 꺼저있단 안내 문구, 최근검색어켜기
+- [x] 검색 창에서 위아래 키보드 클릭 시, 검색 내역 영역으로 내려가고 다시 검색창으로 올 수 있다.
+  - 검색 창에서 아래 키 누를 시, 검색 내역 0번째 인덱스에 active 클래스 부여
+  - 활성화 된 검색 내역이 검색 창에 value로 들어간다.
+  - 맨 끝의 내역에서 아래 키 누를 시, 0번째로 다시 돌아간다.
+  - 0번째 인덱스 검색 내역에서 위로 키 누를 시, 검색 창에 focus
+- [x] 검색 영역 밖을 클릭할 시, 카테고리와 검색 내역 창이 닫긴다.
+  - document에 이벤트리스너를 달아 target이 해당 클래스가 아닌 경우 닫기도록 한다.
+- [x] 입력 글자에 따라 자동 완성 내용이 바뀌도록 한다.
+  - keyup 이벤트가 실행되고, 자동 완성 창이 뜨도록 한다.
+  - (미구현) delay 함수를 이용해서 500ms 후에 보이도록 한다.
+  - 입력한 글자에 맞는 데이터를 fetch한 뒤, 순서에 맞게 자동완성 리스트에 보이게 한다.
+- [x] 자동완성 창에서 위아래 이동 시, 검색 창 내용이 바뀌도록 한다.
+  - 최근 검색어에서 만든 함수 재사용
+
+### 프로그램 요구사항
 
 - [x] ES Modules 이해한다.
 - [x] ES Classes 를 활용해서 모듈을 만든다.
-- [ ] prototype 를 활용해서 모듈을 만든다.
-- [ ] 서버와 데이터 통신을 할 수 있다.
+- [x] prototype 를 활용해서 모듈을 만든다.
+- [x] 서버와 데이터 통신을 할 수 있다.
 - [x] CSS Preprocessor 를 활용한다.
 
-# 수정할 부분
+## 버그 수정기
 
-- 처음 검색 버튼 클릭 시, null 기록에서 삭제
-- 검색 자동완성
+1. 최근 검색 창 또는 자동 완성 창에서 아래로 버튼 클릭 시, 두번 아래로 내려가는 버그
 
-## 구현 설명
+- **event.isComposing** 으로 해결
+- 한글은 자음 + 모음이 한글자이기 때문에 현재 커서에 글자가 '아' 한글자여도 두글자로 인식한다.
+- 때문에 isComposing이라는 이벤트 속성을 이용하여 isComposing이 true일 때는 바로 return을 해준다.
+- 한글 뿐 아니라 아시아계열 문자들에서 버그 발생.
+- keyup으로 했을 시 해당 문제는 윈도우, 맥 둘 다 발생, keydown으로 했을 시엔 맥에서만 발생
 
-```
-├── 📁static
-│   ├── 📁resources
-│   │   ├── 📁scss
-│   │   │   ├── 📁components
-│   │   │   │   └── 📁header
-│   │   │   ├── 📁utils
-│   │   │   │   │── common.scss
-│   │   │   │   │── function.scss
-│   │   │   │   │── reset.scss
-│   │   │   │   └── varable.scss
-│   │   │   └── style.scss
-│   │   └── 📁css
-│   ├── 📁src
-│   │   ├── 📁data
-│   │   ├── 📁views
-│   │   │   ├── 📁components
-│   │   │   │   ├── 📁header
-│   │   │   │   │    └─ 📁search
-│   │   │   │   │       ├── RecentSearchKeywords.js
-│   │   │   │   │       ├── SearchBar.js
-│   │   │   │   │       ├── SearchCategories.js
-│   │   │   │   │       └── SearchCategoriesButton.js
-│   │   │   │   └── header.js
-│   │   │   └── render.js
-│   │   └── main.js
-│   └── index.html
-└── server.js
-```
+1. input창에서 준 input이벤트와 keydown 이벤트가 동시에 발생
 
-- 큰 컴포넌트 (header) 안에 작은 컴포넌트들이 있고, 큰 컴포넌트에서 작은 컴포넌트들의 메서드나 DOM 요소를 주고 받게 해봤습니다.
-- 그리고 큰 컴포넌트들을 render.js에서 조합하는 식으로 설계했습니다.
+- 검색창에 내용을 입력하는건 input도 되고 keydown도 해당되기 때문
+- 때문에 input 이벤트에서는 event.key가 ArrowDown, ArrowUp, Backspace일 때 return  
+  keydown 이벤트에서는 event.key가 ArrowDown, ArrowUp, Backspace가 아닐 때 return 으로 분리
 
-- scss 에 util 폴더는 모든 scss에서 사용되는 부분만 넣어두었습니다.
-- header에서 사용되는 변수와 extend 등은 header.scss 로 넣어두었습니다.
+1. keyup 이벤트로 input창으로 돌아갈 시, 커서가 글자의 맨 앞에 오는 버그
+
+- ArrowDown, ArrowUp, ArrowLeft, ArrowRight 일 때 defalut로 설정해주는 커서 포인터가 있다.
+- ArrowUp일 때는 커서가 맨앞으로 가도록 설정되어 있기 때문
+- event.key가 ArrowUp일 때는 event.preventDefault가 되도록 설정하여 해결
+
+## TODO
+
+- core 컴포넌트와 store 만들기
+- view에서 store 분리
+- MVVM 도전해보고.. 어려울 시 opserver나 MVC로 분리
