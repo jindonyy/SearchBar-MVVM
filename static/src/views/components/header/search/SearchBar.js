@@ -10,7 +10,7 @@ export class SearchBar {
   }
 
   addSearchValueSubmitEvent() {
-    this.$searchWrap.querySelector('form').addEventListener('submit', e => {
+    this.$searchWrap.querySelector('form').addEventListener('submit', () => {
       this.recentSearchKeywords.saveRecentSearchKeyword(this.$searchInput.value);
     });
   }
@@ -54,16 +54,15 @@ export class SearchBar {
 
   moveActivePointerToUp(wordsInSearchPop, searchPopInfo) {
     this.inactivateWordInSearchPop(wordsInSearchPop, searchPopInfo.currentIndex);
-    this.isPointerOnSearchPop(searchPopInfo.currentIndex)
-      ? --searchPopInfo.currentIndex
-      : (this.$searchInput.value = searchPopInfo.previousValue);
+    if (this.isPointerOnSearchPop(searchPopInfo.currentIndex)) searchPopInfo.currentIndex--;
+    if (!this.isPointerOnSearchPop(searchPopInfo.currentIndex)) this.$searchInput.value = searchPopInfo.previousValue;
     this.updateSearchValue(wordsInSearchPop, searchPopInfo.currentIndex);
   }
 
   moveActivePointerToDown(wordsInSearchPop, searchPopInfo) {
     this.inactivateWordInSearchPop(wordsInSearchPop, searchPopInfo.currentIndex);
     if (!this.isPointerOnSearchPop(searchPopInfo.currentIndex)) searchPopInfo.previousValue = this.$searchInput.value;
-    ++searchPopInfo.currentIndex;
+    searchPopInfo.currentIndex++;
     if (searchPopInfo.currentIndex > wordsInSearchPop.length - 1) searchPopInfo.currentIndex = 0;
     this.updateSearchValue(wordsInSearchPop, searchPopInfo.currentIndex);
   }

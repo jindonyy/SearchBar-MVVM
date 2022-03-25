@@ -1,4 +1,4 @@
-import { fetchData } from '../../../../utils/util.js';
+import { fetchData } from '../../../../utils/fetch.js';
 
 export class AutomaticCompletion {
   constructor() {
