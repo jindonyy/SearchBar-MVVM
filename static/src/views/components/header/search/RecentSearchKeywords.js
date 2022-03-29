@@ -1,20 +1,21 @@
+import { RecentSearchKeywordsViewModel } from '../../../../viewModels/RecentSearchKeywordsViewModel.js';
+
 export class RecentSearchKeywords {
-  constructor(searchStorage) {
+  constructor() {
     this.$searchWrap = document.querySelector('.header__search-wrap');
     this.$recentKeywordsWrap = this.$searchWrap.querySelector('.search-recent-keywords-wrap');
     this.$recentKeywords = this.$recentKeywordsWrap.querySelector('.search-recent-keywords');
-    this.searchStorage = searchStorage;
+    this.viewModel = new RecentSearchKeywordsViewModel();
   }
 
   connect(searchBar) {
     this.searchBar = searchBar;
   }
 
-  render() {
+  render(state = this.viewModel.state) {
     this.$recentKeywords.innerHTML = '';
-    const recentKeywordsData = this.searchStorage.getState();
-    if (!recentKeywordsData) return;
-    const recentKeywordsTemplate = recentKeywordsData
+    if (!state) return;
+    const recentKeywordsTemplate = state
       .map(
         keyword => `<li>
                       <a href="javascript:;"}"><span>${keyword}</span></a>
@@ -39,17 +40,13 @@ export class RecentSearchKeywords {
 
   saveRecentSearchKeyword(searchValue) {
     if (!searchValue) return;
-    const recentKeywordsData = this.searchStorage.getState();
-    const recentKeywords = new Set(recentKeywordsData ? recentKeywordsData : []);
-    recentKeywords.add(searchValue);
-    this.searchStorage.setState([...recentKeywords]);
+    this.viewModel.observe(searchValue);
   }
 
   addAllDeleteButtonEvent() {
     this.$recentKeywordsWrap.querySelector('.all-delete-button').addEventListener('mousedown', () => {
-      this.searchStorage.removeState();
+      this.viewModel.observe(null);
       this.$recentKeywordsWrap.classList.remove('active');
-      this.render();
     });
   }
 
@@ -68,5 +65,6 @@ export class RecentSearchKeywords {
     this.connect(searchBar);
     this.render();
     this.addEventListener();
+    this.viewModel.addObserver(this);
   }
 }
