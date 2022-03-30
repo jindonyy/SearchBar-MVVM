@@ -1,13 +1,18 @@
-import { fetchData } from '../utils/fetch.js';
-
 export class FetchStore_GET {
   constructor() {
     this.state;
     this.observers = new Set();
   }
 
+  async fetchData(path) {
+    const FULL_URL = 'http://localhost:3000/' + path;
+    const response = await fetch(FULL_URL);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return response.json();
+  }
+
   async getState(path) {
-    const automaticCompletionData = await fetchData(path);
+    const automaticCompletionData = await this.fetchData(path);
     return automaticCompletionData;
   }
 
