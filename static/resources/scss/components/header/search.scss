@@ -132,6 +132,7 @@ $search-height: 36px;
       }
     }
     &-automatic-completion-wrap {
+      @extend .search-pop;
       display: none;
       padding: 10px 0;
       &.active {
@@ -139,7 +140,7 @@ $search-height: 36px;
       }
       li {
         &.active span,
-        &.active span:hover {
+        span:hover {
           text-decoration: underline;
         }
       }

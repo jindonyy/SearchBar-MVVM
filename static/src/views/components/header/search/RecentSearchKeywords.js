@@ -1,4 +1,4 @@
-import { RecentSearchKeywordsViewModel } from '../../../../viewModels/RecentSearchKeywordsViewModel.js';
+import { RecentSearchKeywordsViewModel } from '../../../../viewModels/header/RecentSearchKeywordsViewModel.js';
 
 export class RecentSearchKeywords {
   constructor() {
@@ -6,16 +6,13 @@ export class RecentSearchKeywords {
     this.$recentKeywordsWrap = this.$searchWrap.querySelector('.search-recent-keywords-wrap');
     this.$recentKeywords = this.$recentKeywordsWrap.querySelector('.search-recent-keywords');
     this.viewModel = new RecentSearchKeywordsViewModel();
+    this.init();
   }
 
-  connect(searchBar) {
-    this.searchBar = searchBar;
-  }
-
-  render(state = this.viewModel.state) {
+  render(props = this.viewModel.state) {
     this.$recentKeywords.innerHTML = '';
-    if (!state) return;
-    const recentKeywordsTemplate = state
+    if (!props) return;
+    const recentKeywordsTemplate = props
       .map(
         keyword => `<li>
                       <a href="javascript:;"}"><span>${keyword}</span></a>
@@ -27,42 +24,62 @@ export class RecentSearchKeywords {
   }
 
   show() {
-    this.$recentKeywordsWrap.classList.add('active');
+    if (this.hasRecentKeywords()) this.$recentKeywordsWrap.classList.add('active');
   }
 
   hide() {
     this.$recentKeywordsWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
-  showRecentKeywords() {
-    if (this.$recentKeywordsWrap.querySelectorAll('li').length) this.show();
+  hasRecentKeywords() {
+    return this.$recentKeywordsWrap.querySelectorAll('li').length ? true : false;
   }
 
-  saveRecentSearchKeyword(searchValue) {
-    if (!searchValue) return;
+  activeWord(index) {
+    const activeWord = this.$recentKeywords.querySelectorAll('li')[index];
+    if (activeWord) activeWord.classList.add('active');
+  }
+
+  inactiveWord() {
+    const activeWord = this.$recentKeywords.querySelector('li.active');
+    if (activeWord) activeWord.classList.remove('active');
+  }
+
+  getWordList() {
+    const wordList = this.$recentKeywords.querySelectorAll('li');
+    return wordList;
+  }
+
+  getActiveWord(index) {
+    const searchPopWordList = this.getWordList();
+    const activeWord = searchPopWordList[index].querySelector('span').textContent;
+    return activeWord;
+  }
+
+  observe(searchValue) {
     this.viewModel.observe(searchValue);
   }
 
-  addAllDeleteButtonEvent() {
+  addAllDeleteButtonEventListener() {
     this.$recentKeywordsWrap.querySelector('.all-delete-button').addEventListener('mousedown', () => {
       this.viewModel.observe(null);
       this.$recentKeywordsWrap.classList.remove('active');
     });
   }
 
-  addSwitchButtonEvent() {
+  addSwitchButtonEventListener() {
     this.$recentKeywordsWrap.querySelector('.switch-button').addEventListener('mousedown', () => {
       this.$recentKeywordsWrap.classList.remove('active');
     });
   }
 
   addEventListener() {
-    this.addAllDeleteButtonEvent();
-    this.addSwitchButtonEvent();
+    this.addAllDeleteButtonEventListener();
+    this.addSwitchButtonEventListener();
   }
 
-  init(searchBar) {
-    this.connect(searchBar);
+  init() {
     this.render();
     this.addEventListener();
     this.viewModel.addObserver(this);

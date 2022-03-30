@@ -175,7 +175,7 @@ ul {
   line-height: 36px;
 }
 
-.search-pop, .header__search-wrap .search-categories, .header__search-wrap .search-recent-keywords-wrap {
+.search-pop, .header__search-wrap .search-categories, .header__search-wrap .search-recent-keywords-wrap, .header__search-wrap .search-automatic-completion-wrap {
   border: 1px solid #ddd;
   -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
           box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
@@ -341,7 +341,7 @@ ul {
 }
 
 .header__search-wrap .search-automatic-completion-wrap li.active span,
-.header__search-wrap .search-automatic-completion-wrap li.active span:hover {
+.header__search-wrap .search-automatic-completion-wrap li span:hover {
   text-decoration: underline;
 }
 

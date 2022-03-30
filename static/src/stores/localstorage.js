@@ -3,11 +3,11 @@ export class LocalStorage {
 
   constructor(key) {
     this.#storageKey = key;
-    this.state = this.initState();
-    this.observer = new Set();
+    this.state = this.getState();
+    this.observers = new Set();
   }
 
-  initState() {
+  getState() {
     const StorageItems = localStorage.getItem(this.#storageKey);
     return StorageItems;
   }
@@ -27,14 +27,14 @@ export class LocalStorage {
     localStorage.removeItem(this.#storageKey);
   }
 
-  addObserver(subscriber) {
-    this.observer.add(subscriber);
+  addObserver(observer) {
+    this.observers.add(observer);
   }
 
   observe(newState) {
     newState ? this.setState(newState) : this.removeState();
-    this.observer.forEach(subscriber => {
-      subscriber.notify(this.state);
+    this.observers.forEach(observer => {
+      observer.notify(this.state);
     });
   }
 }

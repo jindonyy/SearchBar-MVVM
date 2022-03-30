@@ -7,16 +7,5 @@ import { AutomaticCompletion } from './search/AutomaticCompletion.js';
 export const Header = function () {
   this.searchCategories = new SearchCategories();
   this.searchCategoriesButton = new SearchCategoriesButton();
-  this.recentSearchKeywords = new RecentSearchKeywords();
-  this.automaticCompletion = new AutomaticCompletion();
-  this.searchBar = new SearchBar();
-  this.initSearchArea();
-};
-
-Header.prototype.initSearchArea = function () {
-  this.searchCategories.init(this.searchCategoriesButton);
-  this.searchCategoriesButton.init(this.searchCategories);
-  this.recentSearchKeywords.init(this.searchBar);
-  this.automaticCompletion.init(this.searchBar);
-  this.searchBar.init(this.recentSearchKeywords, this.automaticCompletion);
+  new SearchBar(new RecentSearchKeywords(), new AutomaticCompletion());
 };
