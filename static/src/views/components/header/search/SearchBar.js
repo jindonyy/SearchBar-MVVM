@@ -5,10 +5,8 @@ export class SearchBar {
     this.recentSearchKeywords = RecentSearchKeywords;
     this.automaticCompletion = AutomaticCompletion;
     this.searchValue = null;
-    this.searchPopInfo = {
-      activePop: null,
-      currentIndex: -1
-    };
+    this.activedSearchPop = null;
+    this.foucsedSearchWordIndex = -1;
     this.init();
   }
 
@@ -16,10 +14,10 @@ export class SearchBar {
     this.$searchInput.addEventListener('focus', () => {
       if (this.searchValue) {
         this.automaticCompletion.observe(this.searchValue);
-        this.searchPopInfo.activePop = this.automaticCompletion;
+        this.activedSearchPop = this.automaticCompletion;
       } else {
         this.recentSearchKeywords.show();
-        this.searchPopInfo.activePop = this.recentSearchKeywords;
+        this.activedSearchPop = this.recentSearchKeywords;
       }
     });
   }
@@ -35,14 +33,14 @@ export class SearchBar {
     this.recentSearchKeywords.hide();
     this.automaticCompletion.observe(this.searchValue);
     this.automaticCompletion.show();
-    this.searchPopInfo.activePop = this.automaticCompletion;
-    this.searchPopInfo.currentIndex = -1;
+    this.activedSearchPop = this.automaticCompletion;
+    this.foucsedSearchWordIndex = -1;
   }
 
   showRecentSearchKeywordsPop() {
     this.automaticCompletion.hide();
     this.recentSearchKeywords.show();
-    this.searchPopInfo.activePop = this.recentSearchKeywords;
+    this.activedSearchPop = this.recentSearchKeywords;
   }
 
   addSearchValueInputEventListener() {
@@ -56,41 +54,41 @@ export class SearchBar {
   }
 
   isPointerOnSearchPop() {
-    return this.searchPopInfo.currentIndex >= 0 ? true : false;
+    return this.foucsedSearchWordIndex >= 0 ? true : false;
   }
 
   isPointerOnSearchPopEnd() {
-    const searchPopWordList = this.searchPopInfo.activePop.getWordList();
-    return this.searchPopInfo.currentIndex > searchPopWordList.length - 1 ? true : false;
+    const searchPopWordList = this.activedSearchPop.getWordList();
+    return this.foucsedSearchWordIndex > searchPopWordList.length - 1 ? true : false;
   }
 
   updateSearchValue() {
-    const activedWord = this.searchPopInfo.activePop.getActiveWord(this.searchPopInfo.currentIndex);
+    const activedWord = this.activedSearchPop.getActiveWord(this.foucsedSearchWordIndex);
     this.$searchInput.value = activedWord;
   }
 
   inactivateWordInSearchPop() {
-    if (this.isPointerOnSearchPop()) this.searchPopInfo.activePop.inactiveWord(this.searchPopInfo.currentIndex);
+    if (this.isPointerOnSearchPop()) this.activedSearchPop.inactiveWord(this.foucsedSearchWordIndex);
   }
 
   moveActivePointerToUp() {
-    this.searchPopInfo.currentIndex--;
+    this.foucsedSearchWordIndex--;
     if (this.isPointerOnSearchPop()) {
       this.updateSearchValue();
-      this.searchPopInfo.activePop.activeWord(this.searchPopInfo.currentIndex);
+      this.activedSearchPop.activeWord(this.foucsedSearchWordIndex);
     } else this.$searchInput.value = this.searchValue;
   }
 
   moveActivePointerToDown() {
-    this.searchPopInfo.currentIndex++;
-    if (this.isPointerOnSearchPopEnd()) this.searchPopInfo.currentIndex = 0;
+    this.foucsedSearchWordIndex++;
+    if (this.isPointerOnSearchPopEnd()) this.foucsedSearchWordIndex = 0;
     this.updateSearchValue();
-    this.searchPopInfo.activePop.activeWord(this.searchPopInfo.currentIndex);
+    this.activedSearchPop.activeWord(this.foucsedSearchWordIndex);
   }
 
   activeSearchPopWord(key) {
-    if (!this.searchPopInfo.activePop) this.inactivateWordInSearchPop();
-    this.searchPopInfo.activePop.inactiveWord();
+    if (!this.activedSearchPop) this.inactivateWordInSearchPop();
+    this.activedSearchPop.inactiveWord();
     switch (key) {
       case 'ArrowUp':
         if (this.isPointerOnSearchPop()) this.moveActivePointerToUp();
@@ -104,7 +102,7 @@ export class SearchBar {
   addSearchInputKeyDownEventListner() {
     this.$searchInput.addEventListener('keydown', event => {
       const key = event.key || event.keyCode;
-      if (event.isComposing || !['ArrowDown', 'ArrowUp'].includes(key) || !this.searchPopInfo.activePop) return;
+      if (event.isComposing || !['ArrowDown', 'ArrowUp'].includes(key) || !this.activedSearchPop) return;
 
       event.preventDefault();
       this.activeSearchPopWord(key);
@@ -115,7 +113,7 @@ export class SearchBar {
     this.$searchInput.addEventListener('blur', () => {
       this.recentSearchKeywords.hide();
       this.automaticCompletion.hide();
-      this.searchPopInfo.activePop = null;
+      this.activedSearchPop = null;
     });
   }
 
