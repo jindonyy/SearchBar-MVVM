@@ -34,15 +34,6 @@ export class AutomaticCompletion {
     this.$automaticCompletion.insertAdjacentHTML('afterbegin', automaticCompletionWordTemplate);
   }
 
-  show() {
-    if (this.hasAutomaticCompletionWord()) this.$automaticCompletionWrap.classList.add('active');
-  }
-
-  hide() {
-    this.$automaticCompletionWrap.classList.remove('active');
-    this.inactiveWord();
-  }
-
   hasAutomaticCompletionWord() {
     return this.$automaticCompletionWrap.querySelectorAll('li').length ? true : false;
   }
@@ -55,6 +46,15 @@ export class AutomaticCompletion {
   inactiveWord() {
     const activeWord = this.$automaticCompletion.querySelector('li.active');
     if (activeWord) activeWord.classList.remove('active');
+  }
+
+  show() {
+    if (this.hasAutomaticCompletionWord()) this.$automaticCompletionWrap.classList.add('active');
+  }
+
+  hide() {
+    this.$automaticCompletionWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
   getWordList() {

@@ -120,8 +120,8 @@ export class SearchBar {
     this.addSearchInputFocusEventListener();
     this.addSearchValueSubmitEventListener();
     this.addSearchValueInputEventListener();
-    this.addSearchBarBlurEventListner();
     this.addSearchInputKeyDownEventListner();
+    this.addSearchBarBlurEventListner();
   }
 
   init() {

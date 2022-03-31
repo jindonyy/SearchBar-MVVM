@@ -23,19 +23,6 @@ export class RecentSearchKeywords {
     this.$recentKeywords.insertAdjacentHTML('afterbegin', recentKeywordsTemplate);
   }
 
-  show() {
-    if (this.hasRecentKeywords()) this.$recentKeywordsWrap.classList.add('active');
-  }
-
-  hide() {
-    this.$recentKeywordsWrap.classList.remove('active');
-    this.inactiveWord();
-  }
-
-  hasRecentKeywords() {
-    return this.$recentKeywordsWrap.querySelectorAll('li').length ? true : false;
-  }
-
   activeWord(index) {
     const activeWord = this.$recentKeywords.querySelectorAll('li')[index];
     if (activeWord) activeWord.classList.add('active');
@@ -44,6 +31,19 @@ export class RecentSearchKeywords {
   inactiveWord() {
     const activeWord = this.$recentKeywords.querySelector('li.active');
     if (activeWord) activeWord.classList.remove('active');
+  }
+
+  hasRecentKeywords() {
+    return this.$recentKeywordsWrap.querySelectorAll('li').length ? true : false;
+  }
+
+  show() {
+    if (this.hasRecentKeywords()) this.$recentKeywordsWrap.classList.add('active');
+  }
+
+  hide() {
+    this.$recentKeywordsWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
   getWordList() {
