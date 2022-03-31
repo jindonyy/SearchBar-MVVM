@@ -7,8 +7,7 @@ export class SearchBar {
     this.searchValue = null;
     this.searchPopInfo = {
       activePop: null,
-      currentIndex: -1,
-      previousValue: ''
+      currentIndex: -1
     };
     this.init();
   }
@@ -32,23 +31,27 @@ export class SearchBar {
     });
   }
 
+  showAutomaticCompletionPop() {
+    this.recentSearchKeywords.hide();
+    this.automaticCompletion.observe(this.searchValue);
+    this.automaticCompletion.show();
+    this.searchPopInfo.activePop = this.automaticCompletion;
+    this.searchPopInfo.currentIndex = -1;
+  }
+
+  showRecentSearchKeywordsPop() {
+    this.automaticCompletion.hide();
+    this.recentSearchKeywords.show();
+    this.searchPopInfo.activePop = this.recentSearchKeywords;
+  }
+
   addSearchValueInputEventListener() {
     this.$searchInput.addEventListener('input', async event => {
       const key = event.key || event.keyCode;
       if (['ArrowDown', 'ArrowUp'].includes(key)) return;
 
       this.searchValue = this.$searchInput.value;
-      if (this.searchValue) {
-        this.recentSearchKeywords.hide();
-        this.automaticCompletion.observe(this.searchValue);
-        this.automaticCompletion.show();
-        this.searchPopInfo.activePop = this.automaticCompletion;
-        this.searchPopInfo.currentIndex = -1;
-      } else {
-        this.automaticCompletion.hide();
-        this.recentSearchKeywords.show();
-        this.searchPopInfo.activePop = this.recentSearchKeywords;
-      }
+      this.searchValue ? this.showAutomaticCompletionPop() : this.showRecentSearchKeywordsPop();
     });
   }
 
