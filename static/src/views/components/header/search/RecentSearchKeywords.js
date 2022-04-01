@@ -1,22 +1,18 @@
+import { RecentSearchKeywordsViewModel } from '../../../../viewModels/header/RecentSearchKeywordsViewModel.js';
+
 export class RecentSearchKeywords {
-  constructor(RECENT_KEYWORDS_STORAGE_KEY, searchStorage) {
+  constructor() {
     this.$searchWrap = document.querySelector('.header__search-wrap');
     this.$recentKeywordsWrap = this.$searchWrap.querySelector('.search-recent-keywords-wrap');
     this.$recentKeywords = this.$recentKeywordsWrap.querySelector('.search-recent-keywords');
-    this.RECENT_KEYWORDS_STORAGE_KEY = RECENT_KEYWORDS_STORAGE_KEY;
-    this.searchStorage = searchStorage;
+    this.viewModel = new RecentSearchKeywordsViewModel();
+    this.init();
   }
 
-  connect(searchBar) {
-    this.searchBar = searchBar;
-  }
-
-  render() {
+  render(props = this.viewModel.state) {
     this.$recentKeywords.innerHTML = '';
-    const recentKeywordsData = this.searchStorage.getItem(this.RECENT_KEYWORDS_STORAGE_KEY);
-    if (!recentKeywordsData) return;
-    const recentKeywordsTemplate = recentKeywordsData
-      .split(',')
+    if (!props) return;
+    const recentKeywordsTemplate = props
       .map(
         keyword => `<li>
                       <a href="javascript:;"}"><span>${keyword}</span></a>
@@ -28,47 +24,64 @@ export class RecentSearchKeywords {
   }
 
   show() {
-    this.$recentKeywordsWrap.classList.add('active');
+    if (this.hasRecentKeywords()) this.$recentKeywordsWrap.classList.add('active');
   }
 
   hide() {
     this.$recentKeywordsWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
-  showRecentKeywords() {
-    if (this.$recentKeywordsWrap.querySelectorAll('li').length) this.show();
+  hasRecentKeywords() {
+    return this.$recentKeywordsWrap.querySelectorAll('li').length ? true : false;
   }
 
-  saveRecentSearchKeyword(searchValue) {
-    if (!searchValue) return;
-    const recentKeywordsData = this.searchStorage.getItem(this.RECENT_KEYWORDS_STORAGE_KEY);
-    const recentKeywords = new Set(recentKeywordsData ? recentKeywordsData.split(',') : '');
-    recentKeywords.add(searchValue);
-    this.searchStorage.setItem(this.RECENT_KEYWORDS_STORAGE_KEY, [...recentKeywords]);
+  activeWord(index) {
+    const activeWord = this.$recentKeywords.querySelectorAll('li')[index];
+    if (activeWord) activeWord.classList.add('active');
   }
 
-  addAllDeleteButtonEvent() {
+  inactiveWord() {
+    const activeWord = this.$recentKeywords.querySelector('li.active');
+    if (activeWord) activeWord.classList.remove('active');
+  }
+
+  getWordList() {
+    const wordList = this.$recentKeywords.querySelectorAll('li');
+    return wordList;
+  }
+
+  getActiveWord(index) {
+    const searchPopWordList = this.getWordList();
+    const activeWord = searchPopWordList[index].querySelector('span').textContent;
+    return activeWord;
+  }
+
+  observe(searchValue) {
+    this.viewModel.observe(searchValue);
+  }
+
+  addAllDeleteButtonEventListener() {
     this.$recentKeywordsWrap.querySelector('.all-delete-button').addEventListener('mousedown', () => {
-      this.searchStorage.removeItem(this.RECENT_KEYWORDS_STORAGE_KEY);
+      this.viewModel.observe(null);
       this.$recentKeywordsWrap.classList.remove('active');
-      this.render();
     });
   }
 
-  addSwitchButtonEvent() {
+  addSwitchButtonEventListener() {
     this.$recentKeywordsWrap.querySelector('.switch-button').addEventListener('mousedown', () => {
       this.$recentKeywordsWrap.classList.remove('active');
     });
   }
 
   addEventListener() {
-    this.addAllDeleteButtonEvent();
-    this.addSwitchButtonEvent();
+    this.addAllDeleteButtonEventListener();
+    this.addSwitchButtonEventListener();
   }
 
-  init(searchBar) {
-    this.connect(searchBar);
+  init() {
     this.render();
     this.addEventListener();
+    this.viewModel.addObserver(this);
   }
 }

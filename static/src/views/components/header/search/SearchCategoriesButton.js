@@ -4,7 +4,7 @@ export class SearchCategoriesButton {
     this.$categoriesButton = this.$searchWrap.querySelector('.search-categories-button');
   }
 
-  conntect(searchCategories) {
+  connect(searchCategories) {
     this.searchCategories = searchCategories;
   }
 
@@ -30,7 +30,7 @@ export class SearchCategoriesButton {
   }
 
   init(searchCategories) {
-    this.conntect(searchCategories);
+    this.connect(searchCategories);
     this.addEventListener();
   }
 }

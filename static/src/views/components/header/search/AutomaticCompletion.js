@@ -1,34 +1,29 @@
-import { fetchData } from '../../../../utils/util.js';
+import { AutomaticCompletionViewModel } from '../../../../viewModels/header/AutomaticCompletionViewModel.js';
 
 export class AutomaticCompletion {
   constructor() {
     this.$searchWrap = document.querySelector('.header__search-wrap');
     this.$automaticCompletionWrap = this.$searchWrap.querySelector('.search-automatic-completion-wrap');
     this.$automaticCompletion = this.$automaticCompletionWrap.querySelector('.search-automatic-completion');
-  }
-
-  connect(searchBar) {
-    this.searchBar = searchBar;
-  }
-
-  async getAutomaticCompletionData() {
-    const searchData = await fetchData('search');
-    this.searchData = searchData;
+    this.viewModel = new AutomaticCompletionViewModel();
+    this.init();
   }
 
   hasSearchValue(searchValue, currentSearchData) {
     return searchValue && currentSearchData ? true : false;
   }
 
-  render(searchValue) {
+  highlightSearchValue(searchValue, currentSearchKeyword) {
+    return currentSearchKeyword.replace(searchValue, `<b>${searchValue}</b>`);
+  }
+
+  render(props, searchValue) {
     this.$automaticCompletion.innerHTML = '';
-    const currentSearchData = this.searchData[searchValue];
-    if (!this.hasSearchValue(searchValue, currentSearchData)) {
+    if (!this.hasSearchValue(props, searchValue)) {
       this.$automaticCompletionWrap.classList.remove('active');
       return;
     }
-    this.$automaticCompletionWrap.classList.add('active');
-    const automaticCompletionWordTemplate = currentSearchData
+    const automaticCompletionWordTemplate = props
       .map(searchKeyword => {
         const currentSearchKeyword = this.highlightSearchValue(searchValue, searchKeyword.keyword);
         return `<li>
@@ -37,23 +32,47 @@ export class AutomaticCompletion {
       })
       .join('');
     this.$automaticCompletion.insertAdjacentHTML('afterbegin', automaticCompletionWordTemplate);
-    this.show();
   }
 
   show() {
-    this.$automaticCompletionWrap.classList.add('active');
+    if (this.hasAutomaticCompletionWord()) this.$automaticCompletionWrap.classList.add('active');
   }
 
   hide() {
     this.$automaticCompletionWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
-  highlightSearchValue(searchValue, currentSearchKeyword) {
-    return currentSearchKeyword.replace(searchValue, `<b>${searchValue}</b>`);
+  hasAutomaticCompletionWord() {
+    return this.$automaticCompletionWrap.querySelectorAll('li').length ? true : false;
   }
 
-  init(searchBar) {
-    this.connect(searchBar);
-    this.getAutomaticCompletionData();
+  activeWord(index) {
+    const activeWord = this.$automaticCompletion.querySelectorAll('li')[index];
+    if (activeWord) activeWord.classList.add('active');
+  }
+
+  inactiveWord() {
+    const activeWord = this.$automaticCompletion.querySelector('li.active');
+    if (activeWord) activeWord.classList.remove('active');
+  }
+
+  getWordList() {
+    const wordList = this.$automaticCompletion.querySelectorAll('li');
+    return wordList;
+  }
+
+  getActiveWord(index) {
+    const wordList = this.getWordList();
+    const activeWord = wordList[index].querySelector('span').textContent;
+    return activeWord;
+  }
+
+  observe(searchValue) {
+    this.viewModel.observe(searchValue);
+  }
+
+  init() {
+    this.viewModel.addObserver(this);
   }
 }
