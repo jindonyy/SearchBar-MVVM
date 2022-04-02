@@ -3,6 +3,6 @@ export const debounce = (() => {
 
   return (fn, ms) => {
     if (timerID) clearTimeout(timerID);
-    timer = setTimeout(fn, ms);
+    timerID = setTimeout(fn, ms);
   };
 })();

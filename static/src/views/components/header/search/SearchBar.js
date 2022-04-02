@@ -9,8 +9,7 @@ export class SearchBar {
     this.searchValue = null;
     this.searchPopInfo = {
       activePop: null,
-      currentIndex: -1,
-      previousValue: ''
+      currentIndex: -1
     };
     this.init();
   }
@@ -19,7 +18,7 @@ export class SearchBar {
     this.$searchInput.addEventListener('focus', () => {
       if (this.searchValue) {
         this.automaticCompletion.show();
-        this.activedSearchPop = this.automaticCompletion;
+        this.searchPopInfo.activePop = this.automaticCompletion;
       } else {
         this.recentSearchKeywords.show();
         this.searchPopInfo.activePop = this.recentSearchKeywords;
@@ -35,29 +34,28 @@ export class SearchBar {
   }
 
   showAutomaticCompletionPop() {
+    const FETCH_DELAY_TIME = 500;
+
     this.recentSearchKeywords.hide();
-    this.automaticCompletion.observe(this.searchValue);
-    this.activedSearchPop = this.automaticCompletion;
+    debounce(this.automaticCompletion.observe.bind(this.automaticCompletion, this.searchValue), FETCH_DELAY_TIME);
+    this.searchPopInfo.activePop = this.automaticCompletion;
     this.foucsedSearchWordIndex = -1;
   }
 
   showRecentSearchKeywordsPop() {
     this.automaticCompletion.hide();
     this.recentSearchKeywords.show();
-    this.activedSearchPop = this.recentSearchKeywords;
+    this.searchPopInfo.activePop = this.recentSearchKeywords;
   }
 
   addSearchValueInputEventListener() {
-    const FETCH_DELAY_TIME = 500;
-
     this.$searchInput.addEventListener('input', async event => {
       const key = event.key || event.keyCode;
       if (['ArrowDown', 'ArrowUp'].includes(key)) return;
 
       this.searchValue = this.$searchInput.value;
-      this.searchValue
-        ? debounce(this.showAutomaticCompletionPop.bind(this), FETCH_DELAY_TIME)
-        : this.showRecentSearchKeywordsPop();
+      this.showAutomaticCompletionPop();
+      if (!this.searchValue) this.showRecentSearchKeywordsPop();
     });
   }
 

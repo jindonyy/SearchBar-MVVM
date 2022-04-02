@@ -24,16 +24,12 @@ export class RecentSearchKeywords {
   }
 
   show() {
-    if (this.hasRecentKeywords()) this.$recentKeywordsWrap.classList.add('active');
+    this.$recentKeywordsWrap.classList.add('active');
   }
 
   hide() {
     this.$recentKeywordsWrap.classList.remove('active');
     this.inactiveWord();
-  }
-
-  hasRecentKeywords() {
-    return this.$recentKeywordsWrap.querySelectorAll('li').length ? true : false;
   }
 
   activeWord(index) {
