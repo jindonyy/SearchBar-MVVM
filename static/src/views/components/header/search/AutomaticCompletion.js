@@ -9,8 +9,8 @@ export class AutomaticCompletion {
     this.init();
   }
 
-  hasSearchValue(searchValue, currentSearchData) {
-    return searchValue && currentSearchData ? true : false;
+  hasSearchValue(currentSearchData, searchValue) {
+    return currentSearchData.length && searchValue ? true : false;
   }
 
   highlightSearchValue(searchValue, currentSearchKeyword) {
@@ -32,19 +32,7 @@ export class AutomaticCompletion {
       })
       .join('');
     this.$automaticCompletion.insertAdjacentHTML('afterbegin', automaticCompletionWordTemplate);
-  }
-
-  show() {
-    if (this.hasAutomaticCompletionWord()) this.$automaticCompletionWrap.classList.add('active');
-  }
-
-  hide() {
-    this.$automaticCompletionWrap.classList.remove('active');
-    this.inactiveWord();
-  }
-
-  hasAutomaticCompletionWord() {
-    return this.$automaticCompletionWrap.querySelectorAll('li').length ? true : false;
+    this.show();
   }
 
   activeWord(index) {
@@ -55,6 +43,15 @@ export class AutomaticCompletion {
   inactiveWord() {
     const activeWord = this.$automaticCompletion.querySelector('li.active');
     if (activeWord) activeWord.classList.remove('active');
+  }
+
+  show() {
+    this.$automaticCompletionWrap.classList.add('active');
+  }
+
+  hide() {
+    this.$automaticCompletionWrap.classList.remove('active');
+    this.inactiveWord();
   }
 
   getWordList() {
