@@ -1,4 +1,4 @@
-import { RecentSearchKeywordsViewModel } from '../../../../viewModels/header/RecentSearchKeywordsViewModel.js';
+import { RecentSearchKeywordsViewModel } from '../../../../viewModels/header/search/RecentSearchKeywordsViewModel.js';
 
 export class RecentSearchKeywords {
   constructor() {

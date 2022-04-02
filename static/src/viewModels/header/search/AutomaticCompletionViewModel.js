@@ -1,4 +1,4 @@
-import { FetchStore_GET } from '../../stores/fetchStore_GET.js';
+import { FetchStore_GET } from '../../../stores/fetchStore_GET.js';
 
 export class AutomaticCompletionViewModel {
   constructor() {

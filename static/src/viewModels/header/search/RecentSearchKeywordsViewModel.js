@@ -1,4 +1,4 @@
-import { LocalStorage } from '../../stores/LocalStorage.js';
+import { LocalStorage } from '../../../stores/LocalStorage.js';
 
 export class RecentSearchKeywordsViewModel {
   constructor() {

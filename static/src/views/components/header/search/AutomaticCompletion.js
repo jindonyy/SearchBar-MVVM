@@ -1,4 +1,4 @@
-import { AutomaticCompletionViewModel } from '../../../../viewModels/header/AutomaticCompletionViewModel.js';
+import { AutomaticCompletionViewModel } from '../../../../viewModels/header/search/AutomaticCompletionViewModel.js';
 
 export class AutomaticCompletion {
   constructor() {
