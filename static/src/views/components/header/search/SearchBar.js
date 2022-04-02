@@ -1,3 +1,5 @@
+import { debounce } from '../../../../utils/util.js';
+
 export class SearchBar {
   constructor(RecentSearchKeywords, AutomaticCompletion) {
     this.$searchWrap = document.querySelector('.header__search-wrap');
@@ -13,7 +15,7 @@ export class SearchBar {
   addSearchInputFocusEventListener() {
     this.$searchInput.addEventListener('focus', () => {
       if (this.searchValue) {
-        this.automaticCompletion.observe(this.searchValue);
+        this.automaticCompletion.show();
         this.activedSearchPop = this.automaticCompletion;
       } else {
         this.recentSearchKeywords.show();
@@ -32,7 +34,6 @@ export class SearchBar {
   showAutomaticCompletionPop() {
     this.recentSearchKeywords.hide();
     this.automaticCompletion.observe(this.searchValue);
-    this.automaticCompletion.show();
     this.activedSearchPop = this.automaticCompletion;
     this.foucsedSearchWordIndex = -1;
   }
@@ -44,12 +45,16 @@ export class SearchBar {
   }
 
   addSearchValueInputEventListener() {
+    const FETCH_DELAY_TIME = 500;
+
     this.$searchInput.addEventListener('input', async event => {
       const key = event.key || event.keyCode;
       if (['ArrowDown', 'ArrowUp'].includes(key)) return;
 
       this.searchValue = this.$searchInput.value;
-      this.searchValue ? this.showAutomaticCompletionPop() : this.showRecentSearchKeywordsPop();
+      this.searchValue
+        ? debounce(this.showAutomaticCompletionPop.bind(this), FETCH_DELAY_TIME)
+        : this.showRecentSearchKeywordsPop();
     });
   }
 
