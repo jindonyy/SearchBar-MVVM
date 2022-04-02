@@ -1,17 +1,19 @@
 import { debounce } from '../../../../utils/util.js';
 
 export class SearchBar {
-  constructor(RecentSearchKeywords, AutomaticCompletion) {
+  constructor() {
     this.$searchWrap = document.querySelector('.header__search-wrap');
     this.$searchInput = this.$searchWrap.querySelector('.search-input');
-    this.recentSearchKeywords = RecentSearchKeywords;
-    this.automaticCompletion = AutomaticCompletion;
     this.searchValue = null;
     this.searchPopInfo = {
       activePop: null,
       currentIndex: -1
     };
-    this.init();
+  }
+
+  connect(recentSearchKeywords, automaticCompletion) {
+    this.recentSearchKeywords = recentSearchKeywords;
+    this.automaticCompletion = automaticCompletion;
   }
 
   addSearchInputFocusEventListener() {
@@ -131,7 +133,8 @@ export class SearchBar {
     this.addSearchInputKeyDownEventListner();
   }
 
-  init() {
+  init(recentSearchKeywords, automaticCompletion) {
+    this.connect(recentSearchKeywords, automaticCompletion);
     this.addEventListener();
   }
 }

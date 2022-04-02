@@ -1,5 +1,6 @@
 import { Header } from './components/header/Header.js';
 
 export const renderPage = () => {
-  new Header();
+  const header = new Header();
+  header.init();
 };
