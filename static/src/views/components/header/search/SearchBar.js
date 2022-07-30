@@ -107,7 +107,7 @@ export class SearchBar {
     }
   }
 
-  addSearchInputKeyDownEventListner() {
+  addSearchInputKeyDownEventListener() {
     this.$searchInput.addEventListener('keydown', event => {
       const key = event.key || event.keyCode;
       if (event.isComposing || !['ArrowDown', 'ArrowUp'].includes(key) || !this.searchPopInfo.activePop) return;
@@ -117,7 +117,7 @@ export class SearchBar {
     });
   }
 
-  addSearchBarBlurEventListner() {
+  addSearchBarBlurEventListener() {
     this.$searchInput.addEventListener('blur', () => {
       this.recentSearchKeywords.hide();
       this.automaticCompletion.hide();
@@ -129,8 +129,8 @@ export class SearchBar {
     this.addSearchInputFocusEventListener();
     this.addSearchValueSubmitEventListener();
     this.addSearchValueInputEventListener();
-    this.addSearchBarBlurEventListner();
-    this.addSearchInputKeyDownEventListner();
+    this.addSearchBarBlurEventListener();
+    this.addSearchInputKeyDownEventListener();
   }
 
   init(recentSearchKeywords, automaticCompletion) {

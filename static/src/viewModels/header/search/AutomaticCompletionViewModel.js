@@ -24,8 +24,8 @@ export class AutomaticCompletionViewModel {
   }
 
   observe(value) {
-    const SEARCH_STRORE_PATH = 'search';
-    this.store.observe(SEARCH_STRORE_PATH, value);
+    const SEARCH_STORE_PATH = 'search';
+    this.store.observe(SEARCH_STORE_PATH, value);
   }
 
   notify(storeState, value) {
