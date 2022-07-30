@@ -86,7 +86,7 @@
   }
   ```
 
-  3. ViewModel에게서 받은 state를 통해 바인딩이 되야한다.
+  3. ViewModel에게서 받은 state를 통해 화면을 업데이트 한다.
 
   ```js
   constructor() {
